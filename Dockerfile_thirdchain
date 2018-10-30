@@ -1,0 +1,49 @@
+FROM ubuntu:16.04
+
+#
+# docker metainfo
+#
+LABEL author="wens.wq"
+LABEL description="docker file for hx environment"
+LABEL version="1.0"
+
+#
+# for china user, change sources.list
+#
+ADD sources.list  /etc/apt/
+RUN apt-get update
+
+#
+# install some necessary software
+#
+RUN apt-get install -y git vim
+
+
+#
+# install bitcoin prerequisite
+#
+RUN apt-get install -y build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils python3
+RUN apt-get install -y libboost-all-dev
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository ppa:bitcoin/bitcoin
+RUN apt-get update
+RUN apt-get install -y libdb4.8-dev libdb4.8++-dev 
+# RUN apt-get install bitcoind
+RUN apt-get install -y libdb5.3++
+
+
+#
+# data preparation
+# 
+RUN  mkdir -p /hx
+COPY third_chain/bitcoind  /hx
+COPY third_chain/litecoind /hx
+COPY third_chain/start.sh  /hx
+COPY third_chain/hcd /hx
+COPY third_chain/hcwallet /hx
+RUN  chmod +x  /hx/bitcoind  /hx/litecoind /hx/start.sh /hx/hcd /hx/hcwallet
+RUN  ln -s /hx/bitcoind  /usr/bin/bitcoind
+RUN  ln -s /hx/litecoind  /usr/bin/litecoind  
+RUN  ln -s /hx/hcd  /usr/bin/hcd
+RUN  ln -s /hx/hcwallet  /usr/bin/hcwallet
+ENTRYPOINT ["/bin/bash", "-c", "/hx/start.sh"]

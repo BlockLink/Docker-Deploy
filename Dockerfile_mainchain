@@ -1,0 +1,54 @@
+FROM ubuntu:16.04
+
+#
+# docker metainfo
+#
+LABEL author="wens.wq"
+LABEL description="docker file for hx environment"
+LABEL version="1.0"
+
+#
+# for china user, change sources.list
+#
+ADD sources.list  /etc/apt/
+RUN apt-get update
+
+#
+# install some necessary software
+#
+RUN apt-get install -y git vim
+RUN apt-get install -y nginx
+
+# for use crosschain
+RUN apt-get install -y python-pip
+RUN pip install --upgrade pip
+RUN pip install Flask  Flask-JSONRPC
+RUN pip install gevent gunicorn txmongo
+RUN pip install twisted leveldb pymongo requests
+RUN pip install pybitcointools
+
+# Install MongoDB.
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5
+RUN echo "deb [ arch=amd64,arm64 ] http://mirrors.aliyun.com/mongodb/apt/ubuntu xenial/mongodb-org/3.6 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+RUN apt-get update
+RUN apt-get install -y mongodb-org
+
+# others
+
+
+#
+# data preparation
+# 
+RUN  mkdir -p /hx/crosschain_midware
+COPY main_chain/crosschain_midware /hx/crosschain_midware
+COPY main_chain/witness_node /hx
+COPY main_chain/start.sh     /hx
+COPY main_chain/genesis.json /hx
+RUN  chmod +x  /hx/witness_node /hx/start.sh
+RUN  ln -s /hx/witness_node  /usr/bin/witness_node
+
+ENTRYPOINT ["/bin/bash", "-c", "/hx/start.sh"]
+
+
+
+

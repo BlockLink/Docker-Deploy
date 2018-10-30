@@ -1,0 +1,87 @@
+#
+# docker composes file for hx
+# author: wens.wq
+#
+version: "2"
+
+services:
+  # third chain service(ex. btc ltc...)
+  hx_thirdchain:
+    build: 
+      context: .
+      dockerfile: Dockerfile_thirdchain
+    image: hx_thirdchain:1.0
+    labels:
+      author: "wens.wq"
+      description: "third chain service for hx"
+    tty: true
+    ports:
+      - 60011:60011
+      - 60012:60012
+      - 19020:19020
+      - 19019:19019
+    volumes:
+      - ./volumes/bitcoin_data:/hx/bitcoin_data
+      - ./volumes/litecoin_data:/hx/litecoin_data
+      - ./volumes/hc_data:/hx/hc_data
+    networks:
+      app_net:
+        ipv4_address: 192.168.18.6    
+
+    container_name: third_chain
+
+
+
+  hx_mainchain:
+    build:
+      context: .
+      dockerfile: Dockerfile_mainchain
+    image: hx_mainchain:1.0
+    labels:
+      author: "wens.wq"
+      description: "hx main chain"
+    tty: true
+    ports:
+      - 5005:5005
+      - 27017:27017
+      - 8090:8090
+      - 9034:9034
+    volumes:
+      - ./volumes/mongo_data:/hx/mongo_data
+      - ./volumes/witness_data:/hx/witness_data
+      - ./volumes/logs:/hx/logs
+    depends_on:
+      - hx_thirdchain
+    links:
+      - hx_thirdchain:wallet_host
+
+    networks:
+      app_net:
+        ipv4_address: 192.168.18.8
+
+    container_name: main_chain
+
+
+networks: 
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.168.0.0/16
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
