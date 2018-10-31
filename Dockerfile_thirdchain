@@ -21,4 +21,4 @@ RUN  ln -s /hx/bitcoind  /usr/bin/bitcoind
 RUN  ln -s /hx/litecoind  /usr/bin/litecoind  
 RUN  ln -s /hx/hcd  /usr/bin/hcd
 RUN  ln -s /hx/hcwallet  /usr/bin/hcwallet
-ENTRYPOINT ["/bin/bash", "-c", "/hx/start.sh"]
+ENTRYPOINT ["/bin/bash", "-c", "/hx/start_third_chain.sh"]
