@@ -4,4 +4,4 @@ hcd --appdata /hx/hc_data/hcd_data -u a -P b --notls --rpclisten 127.0.0.1:19019
 python /hx/hc_data/starthc.py &
 sleep 15
 hcwallet -A /hx/hc_data/hcwallet_data -u a -P b --testnet --pass 12345678 -c 127.0.0.1:19019 --noclienttls --rpclisten :19020 --rpccert=/hx/hc_data/hcwallet_data/rpc.cert  --debuglevel warn &
-litecoind  -testnet -datadir=/hx/litecoin_data  -rpcuser=a -rpcpassword=b -rpcallowip=192.168.0.0/16 -rpcport=60012 -server  -txindexa
+litecoind  -testnet -datadir=/hx/litecoin_data  -rpcuser=a -rpcpassword=b -rpcallowip=192.168.0.0/16 -rpcport=60012 -server  -txindex
