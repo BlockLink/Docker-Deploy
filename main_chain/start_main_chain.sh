@@ -6,4 +6,5 @@ python /hx/crosschain_midware/btc_data_collector/run_server.py btc >> /hx/logs/b
 python /hx/crosschain_midware/btc_data_collector/run_server.py ltc >> /hx/logs/ltc_collect_file 2>&1 &
 python /hx/crosschain_midware/btc_data_collector/run_server.py hc >> /hx/logs/hc_collect_file 2>&1 &
 python /hx/crosschain_midware/app.py >> /hx/logs/app_file 2>&1 &
-/hx/hx_node --data-dir=/hx/hx_data --rpc-endpoint 0.0.0.0:8090 --p2p-endpoint 0.0.0.0:9034 >> /hx/logs/witness_file 2>&1 
+/hx/hx_node --data-dir=/hx/hx_data --rpc-endpoint=0.0.0.0:8090 --p2p-endpoint=0.0.0.0:9034 >> /hx/logs/witness_file 2>&1 
+# /hx/hx_client  --rpc-endpoint=0.0.0.0:8091 --rpc-http-endpoint=0.0.0.0:8093
