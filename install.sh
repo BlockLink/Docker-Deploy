@@ -25,6 +25,7 @@ if [ ! -d "hx" ]; then
     mv CrossChainMidWare-1.0.1 hx/crosschain_midware
     mkdir -p hx/bitcoin_data hx/hc_data/hcd_data hx/hc_data/hcwallet_data hx/litecoin_data hx/hx_data hx/logs hx/mongo_data
     cp third_chain/starthc.py hx/hc_data/starthc.py
+    cp main_chain/collector_conf.py hx/crosschain_midware/btc_data_collector/collector_conf.py
 fi
 
 docker-compose up

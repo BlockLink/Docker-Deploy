@@ -61,8 +61,13 @@ services:
       - hx_thirdchain
     links:
       - hx_thirdchain:wallet_host
-    #extra_hosts:
+      - hx_thirdchain:btc_wallet
+      - hx_thirdchain:ltc_wallet
+      - hx_thirdchain:eth_wallet
+      - hx_thirdchain:hc_wallet
+    extra_hosts:
       #- "wallet_host:172.24.2.77"
+      - "chaindb:127.0.0.1"
     networks:
       app_net:
         ipv4_address: 192.168.18.8
