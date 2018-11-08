@@ -25,16 +25,16 @@ class CollectorConfig(object):
 
 class BKCollectorConfig(CollectorConfig):
     ASSET_SYMBOL = "BK"
-    RPC_HOST = 'wallet_host'
+    RPC_HOST = 'localhost'
     RPC_PORT = 8093
     SYNC_STATE_FIELD = "bksyncstate"
     SYNC_BLOCK_NUM = "bksyncblocknum"
     SAFE_BLOCK_FIELD = "bksafeblock"
-    CONTRACT_CALLER = "test115258982860"
+    CONTRACT_CALLER = "hxcollector"
 
 class BTCCollectorConfig(CollectorConfig):
     ASSET_SYMBOL = "BTC"
-    RPC_HOST = 'wallet_host'
+    RPC_HOST = 'btc_wallet'
     RPC_PORT = 60011
     SYNC_STATE_FIELD = "btcsyncstate"
     SYNC_BLOCK_NUM = "btcsyncblocknum"
@@ -42,7 +42,7 @@ class BTCCollectorConfig(CollectorConfig):
     MULTISIG_VERSION = 196
 class LTCCollectorConfig(CollectorConfig):
     ASSET_SYMBOL = "LTC"
-    RPC_HOST = 'wallet_host'
+    RPC_HOST = 'ltc_wallet'
     RPC_PORT = 60012
     SYNC_STATE_FIELD = "ltcsyncstate"
     SYNC_BLOCK_NUM = "ltcsyncblocknum"
@@ -50,15 +50,15 @@ class LTCCollectorConfig(CollectorConfig):
     MULTISIG_VERSION = 196
 class UBCollectorConfig(CollectorConfig):
     ASSET_SYMBOL = "UB"
-    RPC_HOST = 'wallet_host'
-    RPC_PORT = 60011
+    RPC_HOST = 'ub_wallet'
+    RPC_PORT = 60013
     SYNC_STATE_FIELD = "ubsyncstate"
     SYNC_BLOCK_NUM = "ubsyncblocknum"
     SAFE_BLOCK_FIELD = "ubsafeblock"
 class HCCollectorConfig(CollectorConfig):
     ASSET_SYMBOL = "HC"
-    RPC_HOST = 'wallet_host'
-    RPC_PORT = 19020
+    RPC_HOST = 'hc_wallet'
+    RPC_PORT = 19021
     SYNC_STATE_FIELD = "hcsyncstate"
     SYNC_BLOCK_NUM = "hcsyncblocknum"
     SAFE_BLOCK_FIELD = "hcsafeblock"
