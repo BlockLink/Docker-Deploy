@@ -21,6 +21,7 @@ services:
       - 60012:60012
       - 19020:19020
       - 19019:19019
+      - 19021:80
     volumes:
       - ./hx:/hx
       #- ./volumes/bitcoin_data:/hx/bitcoin_data
