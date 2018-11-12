@@ -1,0 +1,21 @@
+{
+  "ID": "log_btc_collect",
+  "Name": "log_btc_collect",
+  "Tags": [
+    "primary",
+    "v1"
+  ],
+  "Meta": {
+  },
+  "EnableTagOverride": false,
+  "Check": {
+    "Args": ["tail", "-n", "20", "hx/logs/btc_collect_file"],
+    "Script": "tail",
+    "Interval": "10s"
+  },
+  "Weights": {
+    "Passing": 10,
+    "Warning": 1
+  }
+}
+

@@ -1,0 +1,21 @@
+{
+  "ID": "log_eth_collect2",
+  "Name": "log_eth_collect2",
+  "Tags": [
+    "primary",
+    "v1"
+  ],
+  "Meta": {
+  },
+  "EnableTagOverride": false,
+  "Check": {
+    "Args": ["tail", "-n", "20", "hx/logs/eth_python_collect_file"],
+    "Script": "tail",
+    "Interval": "10s"
+  },
+  "Weights": {
+    "Passing": 10,
+    "Warning": 1
+  }
+}
+
