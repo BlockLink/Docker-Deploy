@@ -1,0 +1,21 @@
+{
+  "ID": "check_liveness",
+  "Name": "check_liveness",
+  "Tags": [
+    "primary",
+    "v1"
+  ],
+  "Meta": {
+  },
+  "EnableTagOverride": false,
+  "Check": {
+    "DeregisterCriticalServiceAfter": "90m",
+    "Args": ["/data/Docker-Deploy/check_liveness.py", "main_chain", "BTC1", "BTC2", "LTC1", "LTC2", "HC1", "HC2", "ETH1", "ETH2"],
+    "Script": "/data/Docker-Deploy/check_liveness.py",
+    "Interval": "10s"
+  },
+  "Weights": {
+    "Passing": 10,
+    "Warning": 1
+  }
+}
