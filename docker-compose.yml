@@ -64,10 +64,12 @@ services:
       - hx_thirdchain:wallet_host
       - hx_thirdchain:btc_wallet
       - hx_thirdchain:ltc_wallet
-      - hx_thirdchain:eth_wallet
-      - hx_thirdchain:hc_wallet
+      # - hx_thirdchain:eth_wallet
+      # - hx_thirdchain:hc_wallet
     extra_hosts:
       #- "wallet_host:172.24.2.77"
+      - "eth_wallet:172.26.140.185"
+      - "hc_wallet:172.26.140.185"
       - "chaindb:127.0.0.1"
     networks:
       app_net:

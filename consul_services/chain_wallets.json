@@ -1,0 +1,22 @@
+{
+  "ID": "chain_wallets_liveness",
+  "Name": "chain_wallets_liveness",
+  "Tags": [
+    "primary",
+    "v1"
+  ],
+  "Meta": {
+  },
+  "EnableTagOverride": false,
+  "Check": {
+    "DeregisterCriticalServiceAfter": "90m",
+    "Args": ["./check_liveness.py", "third_chain", "bitcoind", "litecoind",  "hcd"],
+    "Script": "./check_liveness.py",
+    "Interval": "10s"
+  },
+  "Weights": {
+    "Passing": 10,
+    "Warning": 1
+  }
+}
+
