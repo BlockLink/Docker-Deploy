@@ -5,6 +5,8 @@ from __future__ import print_function
 import os
 import sys
 import json
+import tempfile
+import time
 
 
 class ProcessInfo(object):
@@ -62,6 +64,21 @@ def list_processes_in_docker(container_key):
         print("list_processes_in_docker error: ", e)
         return None
 
+def get_collector1_block_height(container_key, http_port):
+    try:
+        if container_key is not None and container_key != '' and container_key != 'host':
+            output = os.popen('docker exec %s curl -s --header "Content-Type: application/json" --request POST --data \'{"method":"Service.GetBlockHeight","id":1,"params":[]}\' http://127.0.0.1:%d' % (str(container_key), int(http_port))).read()
+        else:
+            output = os.popen('curl -s --header "Content-Type: application/json" --request POST --data \'{"method":"Service.GetBlockHeight","id":1,"params":[]}\' http://127.0.0.1:%d' % int(http_port)).read()
+        result = json.loads(output)
+        height = result.get('result', None)
+        if height is None:
+            raise Exception("response %s" % str(output))
+        return int(height)
+    except Exception as e:
+        print("get_collector1_block_height error: ", e)
+        return None
+
 def ProcessFilter(cmd):
     def f(info):
         if info is None or cmd is None:
@@ -90,6 +107,46 @@ needed_processed = {
     'geth': 'geth',
 }
 
+# first-level collector's http rpc port
+process_collector1_config = {
+    'BTC1': {'port': 5444, 'max_height_not_change_seconds': 30*60,},
+    'LTC1': {'port': 5445, 'max_height_not_change_seconds': 10*60,},
+    'HC1': {'port': 5447, 'max_height_not_change_seconds': 10*60},
+}
+
+def get_collector1_block_height_cache_file(container_key, process_type):
+    return "%s/cache_collector1_block_height_container_%s_process_%s" % (tempfile.tempdir or '/tmp', container_key, process_type)
+
+def get_cache_of_collector1_block_height(container_key, process_type):
+    """read cache of collector1's last collected block height"""
+    cpath = get_collector1_block_height_cache_file(container_key, process_type)
+    if not os.path.isfile(cpath):
+        return None
+    try:
+        cache_txt = open(cpath).read()
+        cache = json.loads(cache_txt)
+        return cache
+    except Exception as e:
+        print("read cache error: ", e)
+        return None
+
+def cache_collector1_block_height(container_key, process_type, height):
+    """update cache of collector1's last collected block height"""
+    cpath = get_collector1_block_height_cache_file(container_key, process_type)
+    try:
+        if not os.path.isfile(cpath):
+            cache = {}
+        else:
+            cache_txt = open(cpath).read()
+            cache = json.loads(cache_txt)
+        cache['last_block_height'] = height
+        cache["last_time"] = int(time.time())
+        with open(cpath, 'w') as f:
+            f.write(json.dumps(cache))
+    except Exception as e:
+        print("set cache error: ", e)
+        return    
+
 def main():
     argv = sys.argv
     keys = list(needed_processed.keys())
@@ -105,12 +162,38 @@ def main():
             return
         process_cmd = needed_processed[process_type]
         processes = list_processes_in_docker(container_key)
+        if processes is None:
+            print("error happened")
+            sys.exit(1)
+            return
         cmd_processes = list(filter(ProcessFilter(process_cmd), processes))
         if len(cmd_processes) <= 0:
             print("cmd %s not active now" % process_cmd)
             sys.exit(1)
             return
         print(str(cmd_processes[0]))
+        collector1_conf = process_collector1_config.get(process_type, None)
+        if collector1_conf is not None:
+            block_height = get_collector1_block_height(container_key, collector1_conf['port'])
+            if block_height is None:
+                sys.exit(1)
+                return
+            max_height_not_change_seconds = collector1_conf['max_height_not_change_seconds']
+            cache = get_cache_of_collector1_block_height(container_key, process_type)
+            if cache is not None:
+                last_block_height = cache['last_block_height']
+                last_time = cache['last_time']
+                if block_height == last_block_height:
+                    now = int(time.time())
+                    if (now - last_time) > max_height_not_change_seconds:
+                        print("too long time not collected now block height")
+                        sys.exit(1)
+                        return
+                else:
+                    cache_collector1_block_height(container_key, process_type, block_height)
+            else:
+                cache_collector1_block_height(container_key, process_type, block_height)
+            print("container %s service %s's block height is %d" % (container_key, process_type, block_height))
 
 if __name__ == '__main__':
     main()
