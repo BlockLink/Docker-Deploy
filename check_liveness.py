@@ -79,6 +79,15 @@ def get_collector1_block_height(container_key, http_port):
         print("get_collector1_block_height error: ", e)
         return None
 
+def get_collectors2_config(container_key):
+    try:
+        cmd = """docker exec main_chain mongo --quiet chaindb /hx/query_collector2.js"""
+        output = os.popen(cmd).read()
+        return json.loads(output)
+    except Exception as e:
+        print("get_collectors2_config error: ", e)
+        return None
+
 def ProcessFilter(cmd):
     def f(info):
         if info is None or cmd is None:
@@ -107,19 +116,28 @@ needed_processed = {
     'geth': 'geth',
 }
 
+# second-level collector's service=>mongo-config-key mapping
+collector2_mongo_configs = {
+    'BTC2': {'key': 'btcsyncblocknum', 'max_height_not_change_seconds': 30*60,},
+    'LTC2': {'key': 'ltcsyncblocknum', 'max_height_not_change_seconds': 10*60,},
+    'HC2': {'key': 'hcsyncblocknum', 'max_height_not_change_seconds': 10*60,},
+    'ETH2': {'key': 'syncblocknum', 'max_height_not_change_seconds': 10*60,},
+}
+
 # first-level collector's http rpc port
 process_collector1_config = {
     'BTC1': {'port': 5444, 'max_height_not_change_seconds': 30*60,},
     'LTC1': {'port': 5445, 'max_height_not_change_seconds': 10*60,},
     'HC1': {'port': 5447, 'max_height_not_change_seconds': 10*60},
+    # 'ETH1': {'port': 5447, 'max_height_not_change_seconds': 10*60},
 }
 
-def get_collector1_block_height_cache_file(container_key, process_type):
-    return "%s/cache_collector1_block_height_container_%s_process_%s" % (tempfile.tempdir or '/tmp', container_key, process_type)
+def get_collector_block_height_cache_file(container_key, process_type):
+    return "%s/cache_collector_block_height_container_%s_process_%s" % (tempfile.tempdir or '/tmp', container_key, process_type)
 
-def get_cache_of_collector1_block_height(container_key, process_type):
-    """read cache of collector1's last collected block height"""
-    cpath = get_collector1_block_height_cache_file(container_key, process_type)
+def get_cache_of_collector_block_height(container_key, process_type):
+    """read cache of collector's last collected block height"""
+    cpath = get_collector_block_height_cache_file(container_key, process_type)
     if not os.path.isfile(cpath):
         return None
     try:
@@ -130,9 +148,9 @@ def get_cache_of_collector1_block_height(container_key, process_type):
         print("read cache error: ", e)
         return None
 
-def cache_collector1_block_height(container_key, process_type, height):
-    """update cache of collector1's last collected block height"""
-    cpath = get_collector1_block_height_cache_file(container_key, process_type)
+def cache_collector_block_height(container_key, process_type, height):
+    """update cache of collector's last collected block height"""
+    cpath = get_collector_block_height_cache_file(container_key, process_type)
     try:
         if not os.path.isfile(cpath):
             cache = {}
@@ -180,7 +198,7 @@ def main():
                 exit_code = 1
                 continue
             max_height_not_change_seconds = collector1_conf['max_height_not_change_seconds']
-            cache = get_cache_of_collector1_block_height(container_key, process_type)
+            cache = get_cache_of_collector_block_height(container_key, process_type)
             if cache is not None:
                 last_block_height = cache['last_block_height']
                 last_time = cache['last_time']
@@ -191,10 +209,44 @@ def main():
                         exit_code = 1
                         continue
                 else:
-                    cache_collector1_block_height(container_key, process_type, block_height)
+                    cache_collector_block_height(container_key, process_type, block_height)
             else:
-                cache_collector1_block_height(container_key, process_type, block_height)
+                cache_collector_block_height(container_key, process_type, block_height)
             print("container %s service %s's block height is %d" % (container_key, process_type, block_height))
+        mongo_config_c2 = collector2_mongo_configs.get(process_type, None)
+        if mongo_config_c2 is not None:
+            c2_configs = get_collectors2_config(container_key)
+            if c2_configs is None:
+                print("can't get collector2 config from mongodb")
+                exit_code = 1
+                continue
+            block_height = None
+            for c2_c in c2_configs:
+                if c2_c.get('key', None) == mongo_config_c2['key']:
+                    value = c2_c.get('value', None)
+                    block_height = value
+            if block_height is None:
+                print("can't get collector2 config from mongodb")
+                exit_code = 1
+                continue
+            print("service %s's config %s's value is %s" % (process_type, mongo_config_c2['key'], str(block_height)))
+            max_height_not_change_seconds = mongo_config_c2['max_height_not_change_seconds']
+            cache = get_cache_of_collector_block_height(container_key, process_type)
+            if cache is not None:
+                last_block_height = cache['last_block_height']
+                last_time = cache['last_time']
+                if block_height == last_block_height:
+                    now = int(time.time())
+                    if (now - last_time) > max_height_not_change_seconds:
+                        print("too long time not collected now block height")
+                        exit_code = 1
+                        continue
+                else:
+                    cache_collector_block_height(container_key, process_type, block_height)
+            else:
+                cache_collector_block_height(container_key, process_type, block_height)
+            print("container %s service %s's block height is %s" % (container_key, process_type, str(block_height)))
+
     if exit_code > 0:
         sys.exit(exit_code)
 

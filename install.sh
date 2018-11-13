@@ -18,6 +18,7 @@ if [ ! -d "hx" ]; then
     mv hx_wallet_linux_v${HX_WALLET_VERSION} hx
     cp third_chain/* hx/
     cp main_chain/start_main_chain.sh hx/
+    cp main_chain/query_collector2.js hx/
     wget https://github.com/HcashOrg/CrossChainMidWare/releases/download/${CROSSCHAIN_MIDWARE_VERSION}/btc_collect
     wget https://github.com/HcashOrg/CrossChainMidWare/releases/download/${CROSSCHAIN_MIDWARE_VERSION}/eth_collect
     mv btc_collect hx/
