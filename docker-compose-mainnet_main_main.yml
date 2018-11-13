@@ -1,0 +1,76 @@
+#
+# docker composes file for hx
+# author: wens.wq
+#
+version: "2"
+
+services:
+  hx_mainchain:
+    #build:
+      #context: .
+      #dockerfile: Dockerfile_mainchain
+    image: zoowii/hxmiddleware_db:latest
+    labels:
+      author: "wens.wq"
+      description: "hx main chain"
+    tty: true
+    ports:
+      - 5005:5005
+      - 27017:27017
+      - 8090:8090
+      - 9034:9034
+    volumes:
+      - ./hx:/hx
+      #- ./volumes/mongo_data:/hx/mongo_data
+      #- ./volumes/witness_data:/hx/witness_data
+      #- ./volumes/logs:/hx/logs
+    depends_on:
+      - hx_thirdchain
+    links:
+      - hx_thirdchain:wallet_host
+      - hx_thirdchain:btc_wallet
+      - hx_thirdchain:ltc_wallet
+      # - hx_thirdchain:eth_wallet
+      # - hx_thirdchain:hc_wallet
+    extra_hosts:
+      - "wallet_host:"
+      - "chaindb:127.0.0.1"
+      - "eth_wallet:"
+      - "btc_wallet:"
+      - "ltc_wallet:"
+      - "hc_wallet:"
+
+    networks:
+      app_net:
+        ipv4_address: 192.168.18.8
+
+    container_name: main_chain
+    entrypoint:
+      - /bin/bash
+      - -c
+      - /hx/start_main_chain.sh
+
+
+networks: 
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.168.0.0/16
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
