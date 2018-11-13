@@ -154,30 +154,31 @@ def main():
         print("need pass container key(or 'host') and process name as arguments, available processes are: %s" % ', '.join(keys))
         sys.exit(1)
         return
+    exit_code = 0
     container_key = argv[1]
     for process_type in argv[2:]:
         if process_type not in keys:
             print("not allowed process name %s" % process_type)
-            sys.exit(1)
-            return
+            exit_code = 1
+            continue
         process_cmd = needed_processed[process_type]
         processes = list_processes_in_docker(container_key)
         if processes is None:
             print("error happened")
-            sys.exit(1)
-            return
+            exit_code = 1
+            continue
         cmd_processes = list(filter(ProcessFilter(process_cmd), processes))
         if len(cmd_processes) <= 0:
             print("cmd %s not active now" % process_cmd)
-            sys.exit(1)
-            return
+            exit_code = 1
+            continue
         print(str(cmd_processes[0]))
         collector1_conf = process_collector1_config.get(process_type, None)
         if collector1_conf is not None:
             block_height = get_collector1_block_height(container_key, collector1_conf['port'])
             if block_height is None:
-                sys.exit(1)
-                return
+                exit_code = 1
+                continue
             max_height_not_change_seconds = collector1_conf['max_height_not_change_seconds']
             cache = get_cache_of_collector1_block_height(container_key, process_type)
             if cache is not None:
@@ -187,13 +188,15 @@ def main():
                     now = int(time.time())
                     if (now - last_time) > max_height_not_change_seconds:
                         print("too long time not collected now block height")
-                        sys.exit(1)
-                        return
+                        exit_code = 1
+                        continue
                 else:
                     cache_collector1_block_height(container_key, process_type, block_height)
             else:
                 cache_collector1_block_height(container_key, process_type, block_height)
             print("container %s service %s's block height is %d" % (container_key, process_type, block_height))
+    if exit_code > 0:
+        sys.exit(exit_code)
 
 if __name__ == '__main__':
     main()
