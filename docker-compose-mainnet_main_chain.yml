@@ -21,7 +21,7 @@ services:
       - 9034:9034
     volumes:
       - ./hx:/hx
-      - ./hx_pgsql_data:/var/formal_data
+      - ./hx_pgsql_data/formal_data:/var/formal_data
       #- ./volumes/mongo_data:/hx/mongo_data
       #- ./volumes/witness_data:/hx/witness_data
       #- ./volumes/logs:/hx/logs
