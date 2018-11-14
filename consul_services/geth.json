@@ -9,6 +9,7 @@
   },
   "EnableTagOverride": false,
   "Check": {
+    "DeregisterCriticalServiceAfter": "6000m", 
     "Args": ["./check_liveness.py", "host", "geth"],
     "Script": "./check_liveness.py",
     "Interval": "10s"

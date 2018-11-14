@@ -9,6 +9,7 @@
   },
   "EnableTagOverride": false,
   "Check": {
+    "DeregisterCriticalServiceAfter": "6000m", 
     "Args": ["./check_liveness.py", "third_chain", "bitcoind", "litecoind",  "hcd", "hcwallet"],
     "Script": "./check_liveness.py",
     "Interval": "10s"
