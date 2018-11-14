@@ -109,6 +109,8 @@ needed_processed = {
     'HC2': 'python /hx/crosschain_midware/btc_data_collector/run_server.py hc',
     'ETH1': '/hx/eth_collect -ChainType=ETH',
     'ETH2': 'python /hx/crosschain_midware/eth_data_collector/run_server.py',
+    'hxnode': 'hx/hx_node',
+    'hxclient': 'hx/hx_client',
     'bitcoind': '/hx/bitcoind',
     'hcd': '/hx/hcd',
     'hcwallet': '/hx/hcwallet',
@@ -205,7 +207,7 @@ def main():
                 if block_height == last_block_height:
                     now = int(time.time())
                     if (now - last_time) > max_height_not_change_seconds:
-                        print("too long time not collected now block height")
+                        print("too long time not collected new block height")
                         exit_code = 1
                         continue
                 else:
@@ -238,7 +240,7 @@ def main():
                 if block_height == last_block_height:
                     now = int(time.time())
                     if (now - last_time) > max_height_not_change_seconds:
-                        print("too long time not collected now block height")
+                        print("too long time not collected new block height")
                         exit_code = 1
                         continue
                 else:
