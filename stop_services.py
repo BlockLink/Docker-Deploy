@@ -13,7 +13,7 @@ def try_parse_int(s):
     return None
 
 def fetch_service_pid(container_key, cmd):
-  output = os.popen("docker exec %s ps -au | grep \"%s\" | grep -v \"grep\" | awk '{ print $2 }'" % (container_key, cmd)).read()
+  output = os.popen("docker exec %s ps -aux | grep \"%s\" | grep -v \"grep\" | awk '{ print $2 }'" % (container_key, cmd)).read()
   return try_parse_int(output)
 
 main_chain_key = "main_chain"
