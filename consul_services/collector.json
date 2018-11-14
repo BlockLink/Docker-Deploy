@@ -10,7 +10,7 @@
   "EnableTagOverride": false,
   "Check": {
     "DeregisterCriticalServiceAfter": "6000m",
-    "Args": ["./check_liveness.py", "main_chain", "BTC1", "BTC2", "LTC1", "LTC2", "HC1", "HC2", "ETH1", "ETH2"],
+    "Args": ["./check_liveness.py", "main_chain", "BTC1", "BTC2", "LTC1", "LTC2", "HC1", "HC2", "ETH1", "ETH2", "hxnode", "hxclient"],
     "Script": "./check_liveness.py",
     "Interval": "30s"
   },
