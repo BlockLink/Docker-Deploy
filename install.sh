@@ -13,9 +13,9 @@ if [ "$2" != "" ]; then
 fi
 
 if [ ! -d "hx" ]; then
-    wget https://github.com/HcashOrg/HyperExchange/releases/download/v${HX_WALLET_VERSION}/hx_wallet_linux_v${HX_WALLET_VERSION}.tar.gz
-    tar xf hx_wallet_linux_v${HX_WALLET_VERSION}.tar.gz
-    mv hx_wallet_linux_v${HX_WALLET_VERSION} hx
+    wget https://github.com/HcashOrg/HyperExchange/releases/download/v${HX_WALLET_VERSION}/hx_wallet_linux_${HX_WALLET_VERSION}.tar.gz
+    tar xf hx_wallet_linux_${HX_WALLET_VERSION}.tar.gz
+    mv hx_${HX_WALLET_VERSION} hx
     cp third_chain/* hx/
     cp main_chain/start_main_chain.sh hx/
     cp main_chain/query_collector2.js hx/
