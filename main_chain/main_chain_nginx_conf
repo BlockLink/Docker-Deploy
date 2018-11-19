@@ -23,6 +23,7 @@ upstream middleware_server {
 server {
 	listen 5005;
 	location / {
+		keepalive_timeout 0;
 		proxy_pass http://middleware_server;
 		proxy_set_header   Host             $host; 
         	proxy_set_header   X-Real-IP        $remote_addr; 

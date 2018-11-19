@@ -51,8 +51,8 @@ services:
     ports:
       - 5005:5005
       - 27017:27017
-      - 8090:8090
-      - 9034:9034
+      #- 8090:8090
+      #- 9034:9034
     volumes:
       - ./hx:/hx
       - ./hx_pgsql_data/formal_data:/var/formal_data
