@@ -19,7 +19,16 @@ mongo --port 27017 --quiet /hx/crosschain_midware/mgmt/init_db.js
 /hx/btc_collect -ChainType=LTC >> /hx/logs/ltc_collect_file 2>&1 &
 /hx/btc_collect -ChainType=HC >> /hx/logs/hc_collect_file 2>&1 &
 /hx/eth_collect -ChainType=ETH >> /hx/logs/eth_collect_file 2>&1 &
-python /hx/crosschain_midware/app.py >> /hx/logs/app_file 2>&1 &
+
+python /hx/crosschain_midware/app.py 5006 >> /hx/logs/app_file1 2>&1 &
+python /hx/crosschain_midware/app.py 5007 >> /hx/logs/app_file2 2>&1 &
+python /hx/crosschain_midware/app.py 5008 >> /hx/logs/app_file3 2>&1 &
+python /hx/crosschain_midware/app.py 5009 >> /hx/logs/app_file4 2>&1 &
+
+apt install -y nginx
+cp /hx/main_chain_nginx_conf /etc/nginx/sites-available/default
+service nginx restart
+
 /hx/hx_node --data-dir=/hx/hx_data --rpc-endpoint=0.0.0.0:8090 --p2p-endpoint=0.0.0.0:9034 >> /hx/logs/witness_file 2>&1 &
 screen -dmS hx /hx/hx_client --rpc-http-endpoint=0.0.0.0:8093 
 sleep 20
