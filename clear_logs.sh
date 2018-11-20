@@ -1,0 +1,21 @@
+#!/bin/bash
+> ./hx/logs/app_file
+> ./hx/logs/app_file1
+> ./hx/logs/app_file2
+> ./hx/logs/app_file3
+> ./hx/logs/app_file4
+> ./hx/logs/btc_collect_file
+> ./hx/logs/hx_collect_file
+> ./hx/logs/hc_collect_file
+> ./hx/logs/ltc_collect_file
+> ./hx/logs/eth_collect_file
+> ./hx/logs/btc_python_collect_file
+> ./hx/logs/hc_python_collect_file
+> ./hx/logs/hx_python_collect_file
+> ./hx/logs/ltc_python_collect_file
+> ./hx/logs/eth_collect_file
+> ./hx/logs/witness_file
+> ./hx/logs/witness_file2
+> ./hx/logs/mongod_file
+> ./hx/logs/contract_platform.log
+> ./hx/logs/consul_log
