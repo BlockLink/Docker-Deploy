@@ -18,12 +18,14 @@ upstream middleware_server {
       server 127.0.0.1:5006;
       server 127.0.0.1:5007;
       server 127.0.0.1:5008;
+      server 127.0.0.1:5009;
 }
 
 server {
 	listen 5005;
 	location / {
 		keepalive_timeout 0;
+		proxy_connect_timeout 100s;
 		proxy_pass http://middleware_server;
 		proxy_set_header   Host             $host; 
         	proxy_set_header   X-Real-IP        $remote_addr; 
