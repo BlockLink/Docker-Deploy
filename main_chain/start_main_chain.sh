@@ -20,10 +20,14 @@ mongo --port 27017 --quiet /hx/crosschain_midware/mgmt/init_db.js
 /hx/btc_collect -ChainType=HC >> /hx/logs/hc_collect_file 2>&1 &
 /hx/eth_collect -ChainType=ETH >> /hx/logs/eth_collect_file 2>&1 &
 
-python /hx/crosschain_midware/app.py 5006 >> /hx/logs/app_file1 2>&1 &
-python /hx/crosschain_midware/app.py 5007 >> /hx/logs/app_file2 2>&1 &
-python /hx/crosschain_midware/app.py 5008 >> /hx/logs/app_file3 2>&1 &
-python /hx/crosschain_midware/app.py 5009 >> /hx/logs/app_file4 2>&1 &
+pip install gunicorn
+
+gunicorn -w 4 -b 127.0.0.1:5010 --chdir /hx/crosschain_midware -D --log-file /hx/logs/app_file_gunicorn --error-logfile /hx/logs/app_file_error_gunicorn app:app
+
+# python /hx/crosschain_midware/app.py 5006 >> /hx/logs/app_file1 2>&1 &
+# python /hx/crosschain_midware/app.py 5007 >> /hx/logs/app_file2 2>&1 &
+# python /hx/crosschain_midware/app.py 5008 >> /hx/logs/app_file3 2>&1 &
+# python /hx/crosschain_midware/app.py 5009 >> /hx/logs/app_file4 2>&1 &
 
 apt install -y nginx
 cp /hx/main_chain_nginx_conf /etc/nginx/sites-available/default
