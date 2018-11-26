@@ -124,7 +124,7 @@ if (db.auth("dbAdmin", "admin12#$%") != 1) {
     });
      db.b_config.insert({
         'key': 'hcsyncblocknum',
-        'value': '50000'
+        'value': '0'
     });
     db.b_config.insert({
         'key': 'hcsafeblock',
