@@ -36,4 +36,5 @@ if [ ! -d "hx" ]; then
     cp main_chain/init_db_regtest.js hx/crosschain_midware/mgmt/init_db.js
 fi
 
+source ./set_env.sh
 docker-compose -f docker-compose-regtest.yml up -d
