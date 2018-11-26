@@ -21,7 +21,7 @@ if [ ! -d "hx" ]; then
     cp third_chain/starthc_regtest.py hx/starthc.py
     cp main_chain/start_main_chain.sh hx/
     cp main_chain/query_collector2.js hx/
-    
+
     wget https://github.com/HcashOrg/CrossChainMidWare/releases/download/${CROSSCHAIN_MIDWARE_VERSION}/btc_collect
     wget https://github.com/HcashOrg/CrossChainMidWare/releases/download/${CROSSCHAIN_MIDWARE_VERSION}/eth_collect
     mv btc_collect hx/
@@ -33,6 +33,7 @@ if [ ! -d "hx" ]; then
     mkdir -p hx/bitcoin_data hx/hc_data/hcd_data hx/hc_data/hcwallet_data hx/litecoin_data hx/hx_data hx/logs hx/mongo_data
     cp third_chain/starthc_regtest.py hx/hc_data/starthc.py
     cp main_chain/collector_conf.py hx/crosschain_midware/btc_data_collector/collector_conf.py
+    cp main_chain/init_db_regtest.js hx/crosschain_midware/mgmt/init_db.js
 fi
 
 docker-compose -f docker-compose-regtest.yml up -d
