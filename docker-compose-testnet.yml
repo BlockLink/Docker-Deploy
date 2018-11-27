@@ -27,9 +27,9 @@ services:
       #- ./volumes/bitcoin_data:/hx/bitcoin_data
       #- ./volumes/litecoin_data:/hx/litecoin_data
       #- ./volumes/hc_data:/hx/hc_data
-    networks:
-      app_net:
-        ipv4_address: 192.168.18.6    
+      #    networks:
+      #app_net:
+      #  ipv4_address: 192.168.18.6    
 
     container_name: third_chain
     entrypoint:
@@ -65,16 +65,16 @@ services:
       - hx_thirdchain:wallet_host
       - hx_thirdchain:btc_wallet
       - hx_thirdchain:ltc_wallet
-      # - hx_thirdchain:eth_wallet
+      #- hx_thirdchain:eth_wallet
       # - hx_thirdchain:hc_wallet
     extra_hosts:
       #- "wallet_host:172.24.2.77"
-      - "eth_wallet:172.26.140.185"
-      - "hc_wallet:172.26.140.185"
+      - "eth_wallet:${WALLET_HOST}"
+      - "hc_wallet:${WALLET_HOST}"
       - "chaindb:127.0.0.1"
-    networks:
-      app_net:
-        ipv4_address: 192.168.18.8
+    # networks:
+    #  app_net:
+    #    ipv4_address: 192.168.18.8
 
     container_name: main_chain
     entrypoint:
@@ -83,13 +83,13 @@ services:
       - /hx/start_main_chain.sh
 
 
-networks: 
-  app_net:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-      - subnet: 192.168.0.0/16
+    # networks: 
+    #app_net:
+    # driver: bridge
+    # ipam:
+    #  driver: default
+    #  config:
+    #  - subnet: 192.168.18.0/16
 
 
 

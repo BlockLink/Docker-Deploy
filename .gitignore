@@ -1,3 +1,9 @@
 /hx
 /hx_pgsql_data
+/wallet.json
+/hx_wallet_linux_*.tar.gz*
+/CrossChainMidWare.tar.gz
+/btc_collect
+/eth_collect
+/hx_client
 
