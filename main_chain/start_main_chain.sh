@@ -40,5 +40,6 @@ python /hx/crosschain_midware/btc_data_collector/run_server.py bk >> /hx/logs/hx
 python /hx/crosschain_midware/btc_data_collector/run_server.py hc >> /hx/logs/hc_python_collect_file 2>&1 &
 python /hx/crosschain_midware/btc_data_collector/run_server.py ltc >> /hx/logs/ltc_python_collect_file 2>&1 &
 python /hx/crosschain_midware/btc_data_collector/run_server.py btc >> /hx/logs/btc_python_collect_file 2>&1 &
+python /hx/crosschain_midware/omni_data_collector/omni_data_collector/run_server.py usdt >> /hx/logs/usdt_python_collect_file 2>&1 &
 python /hx/crosschain_midware/eth_data_collector/run_server.py  >> /hx/logs/eth_python_collect_file 2>&1 &
 /bin/bash
