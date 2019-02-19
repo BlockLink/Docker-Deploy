@@ -65,6 +65,7 @@ services:
       - hx_thirdchain:wallet_host
       - hx_thirdchain:btc_wallet
       - hx_thirdchain:ltc_wallet
+      - hx_thirdchain:usdt_wallet
       #- hx_thirdchain:eth_wallet
       # - hx_thirdchain:hc_wallet
     extra_hosts:
