@@ -38,6 +38,7 @@ services:
       - "btc_wallet:"
       - "ltc_wallet:"
       - "hc_wallet:"
+      - "usdt_wallet:"
 
     networks:
       app_net:
