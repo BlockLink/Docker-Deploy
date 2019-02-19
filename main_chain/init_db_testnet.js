@@ -27,6 +27,7 @@ if (db.auth("dbAdmin", "admin12#$%") != 1) {
     db.createCollection("b_chain_account");
     db.createCollection("b_btc_unspent");
     db.createCollection("b_btc_multisig_address");
+    db.createCollection("b_usdt_multisig_address"); 
     db.createCollection("b_deposit_transaction");
     db.createCollection("b_withdraw_transaction");
     db.createCollection("b_exchange_contracts");
@@ -98,6 +99,19 @@ if (db.auth("dbAdmin", "admin12#$%") != 1) {
         'key': 'btcsyncstate',
         'value': 'false'
     });
+    db.b_config.insert({
+        'key': 'usdtsafeblock',
+        'value': '6'
+    });
+    db.b_config.insert({
+        'key': 'usdtsyncblocknum',
+        'value': '1445000'
+    });
+    db.b_config.insert({
+        'key': 'usdtsyncstate',
+        'value': '0'
+    });
+
     db.b_config.insert({
         'key': 'ltcsyncblocknum',
         'value': '866000'
